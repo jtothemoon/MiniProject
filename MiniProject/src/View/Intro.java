@@ -8,6 +8,7 @@ import Model.PlayDTO;
 public class Intro {
 	public void gameIntro(String userId) {
 		System.out.println("===== 인트로 =====");
+		
 		makeNickName(userId);
 	}
 	
