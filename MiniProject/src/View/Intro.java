@@ -9,9 +9,15 @@ public class Intro {
 	public void gameIntro(String userId) {
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("취직을 했는데 회사가 이상하다");
-		System.out.println("일 잘하면 내가 사장이란다.");
-		System.out.println("사장이 내게 다가와 묻는다");
+		System.out.println("취업 준비만 N년...");
+		System.out.println("셀 수 없는 낙방 끝에, 드디어 합격 통지가 날아왔다!");
+		System.out.println("기대감을 품고 첫 출근한 회사.");
+		System.out.println("입구에서 갑자기 사장님과 마주쳤다!");
+
+		System.out.println("사장 : \"처음 보는 얼굴이군. 자네는 이름이 뭔가?\"");
+
+		System.out.println("나 \"아, 네! 저는...!\"");
+		
 		System.out.println("                    .............................................................          \r\n"
 				+ "                             .............................................................          \r\n"
 				+ "                             .=#*******************************************************#=.          \r\n"
@@ -81,9 +87,13 @@ public class Intro {
 				+ "                  -*##++++++++##*++++++++++++++++*##*++++++++++++++++++* ##+++++###-                \r\n"
 				+ "                  -*##++++++++##*++++++++++++++++##*++++++++++++++++++* ##++++++###-                \r\n"
 				+ "                  :*#*---------##*---------------=##=---------------* ##--------*#*-                \r\n"
-				+ "                                                                                                      ");	
+				+ "                                                                                                      ");
 		
 		makeNickName(userId);
+
+		System.out.println("사장 \"에휴, 됐네됐어. 어차피 자네도 얼마 못 버티고 나가겠지. 뭐, 열심히 해보게나. 열심히 하다보면 혹시 모르지.\"");
+		System.out.println("나를 무시하고 떠나가는 사장님을 보며, 나는 전의를 불태웠다...");
+		System.out.println("언젠가는 저 놈을 밀어내고 이 회사의 사장을 차지하고 말겠다고!");
 		
 		System.out.println("게임을 시작하기에 앞서 튜토리얼을 보겠습니까?");
 		System.out.println("[1] 본다 [2] 안본다");
@@ -121,7 +131,7 @@ public class Intro {
 		PlayDAO dao = new PlayDAO();
 		
 		row = dao.insertPlayInfo(dto);
-		if(row > 0) System.out.println(nickName + "사원 어서오게.");
+		if(row > 0) System.out.println("입력하신 닉네임은 " + nickName + "입니다.");
 	}
 	
 }
