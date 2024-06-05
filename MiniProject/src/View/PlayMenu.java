@@ -32,7 +32,7 @@ public class PlayMenu {
 		String position = "";
 
 		int bfExperience, bfHealth, bfMoney;
-		
+
 		int happyEndingFlag = 0; // 0: 그냥종료 1: 해피엔딩 2: 게임종료
 
 		System.out.println("게임을 시작합니다.");
@@ -50,7 +50,10 @@ public class PlayMenu {
 
 			System.out.println("[1] 업무 [2] 교육 [3] 출장 [4] 휴식 [5] 상점 [6] 종료");
 			System.out.print(">>");
-			int selectMenu = sc.nextInt();
+
+			int selectMenu;
+
+			selectMenu = checkInputValid(sc);
 
 			switch (selectMenu) {
 			case 1:
@@ -86,7 +89,7 @@ public class PlayMenu {
 			}
 
 			GameOverAscii goAscii = new GameOverAscii();
-			
+
 			if (gameOver(dto, eventGameOverFlag)) {
 				eventGameOverFlag = true;
 				happyEndingFlag = goAscii.gameOver(dto);
@@ -101,6 +104,18 @@ public class PlayMenu {
 		}
 		return happyEndingFlag;
 
+	}
+
+	private int checkInputValid(Scanner sc) {
+		int sMenu;
+
+		while (!sc.hasNextInt()) {
+			sc.next();
+			System.err.print("에러! 숫자가 아닙니다. \n재 선택 : ");
+		}
+
+		sMenu = sc.nextInt();
+		return sMenu;
 	}
 
 	private String checkPosition(PlayDTO dto) {
@@ -155,7 +170,8 @@ public class PlayMenu {
 		System.out.println("=====메뉴를 선택해주세요=====");
 		System.out.println("[1] 업무 [2] 뒤로가기");
 		System.out.print(">>");
-		int b = sc.nextInt();
+		int b;
+		b = checkInputValid(sc);
 
 		if (b == 1) {
 			eventFlag = pg.work(dto);
@@ -175,7 +191,9 @@ public class PlayMenu {
 		System.out.println("=====메뉴를 선택해주세요=====");
 		System.out.println("[1] 교육 [2] 뒤로가기");
 		System.out.print(">>");
-		int b = sc.nextInt();
+
+		int b;
+		b = checkInputValid(sc);
 
 		if (b == 1) {
 			eventFlag[0] = true;
@@ -208,7 +226,9 @@ public class PlayMenu {
 		System.out.println("=====메뉴를 선택해주세요=====");
 		System.out.println("[1] 출장 [2] 뒤로가기");
 		System.out.print(">>");
-		int b = sc.nextInt();
+		int b;
+
+		b = checkInputValid(sc);
 
 		if (b == 1) {
 			eventFlag = pg.businessTrip(dto);
@@ -227,7 +247,8 @@ public class PlayMenu {
 		System.out.print("[1] 집에서 쉬기 [2] 여행가기 [3] 뒤로가기");
 		System.out.print(">>");
 
-		int a = sc.nextInt();
+		int a;
+		a = checkInputValid(sc);
 
 		if (a == 1) {
 			eventFlag = pg.rest(dto, a);
@@ -266,7 +287,9 @@ public class PlayMenu {
 		System.out.println("6. 뒤로가기");
 		System.out.print(">>");
 
-		int choice = sc.nextInt();
+		int choice;
+		choice = checkInputValid(sc);
+
 		if (choice != 6) {
 			eventFlag[2] = true;
 		}
@@ -379,7 +402,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setExperience(dto.getExperience() - 10);
@@ -400,7 +424,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setExperience(dto.getExperience() + 10);
@@ -420,7 +445,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() - 50);
@@ -440,7 +466,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() - 100);
@@ -460,7 +487,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() + 100);
@@ -478,7 +506,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -498,7 +527,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setHealth(dto.getHealth() + 15);
@@ -517,7 +547,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -537,7 +568,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -557,7 +589,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setHealth(dto.getHealth() + 10);
@@ -574,7 +607,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -594,7 +628,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() - 50);
@@ -614,7 +649,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -633,7 +669,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -653,7 +690,8 @@ public class PlayMenu {
 			while (true) {
 				System.out.println(rDto.getEventText());
 				System.out.print(">>");
-				int num = sc.nextInt();
+				int num;
+				num = checkInputValid(sc);
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() + 100);
