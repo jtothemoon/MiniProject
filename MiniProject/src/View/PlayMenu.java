@@ -24,10 +24,11 @@ public class PlayMenu {
 
 		boolean menuFlag = true;
 		boolean eventFlag[] = new boolean[2];
+		boolean eventGameOverFlag = false;
 
 		int bfPosition = 0;
 		String position = "";
-		
+
 		int bfExperience, bfHealth, bfMoney;
 
 		System.out.println("게임을 시작합니다.");
@@ -38,7 +39,7 @@ public class PlayMenu {
 			position = checkPosition(dto);
 			bfPosition = dto.getExperience() / 100;
 			displayUserInfo(dto, position);
-			
+
 			bfExperience = dto.getExperience();
 			bfHealth = dto.getHealth();
 			bfMoney = dto.getMoney();
@@ -74,16 +75,16 @@ public class PlayMenu {
 			}
 
 			if (eventFlag[0]) {
-				callEvent(dto);
+				eventGameOverFlag = callEvent(dto, eventGameOverFlag);
+			}
+
+			updatePosition(dto, bfPosition);
+
+			if (gameOver(dto, eventGameOverFlag)) {
+				break;
 			}
 			
 			updatePlayerInfo(dto, bfExperience, bfHealth, bfMoney);
-			
-			updatePosition(dto, bfPosition);
-			
-			if (gameOver(dto)) {
-				break;
-			}
 
 			if (eventFlag[1]) {
 				updatePlayDays(dto, selectMenu);
@@ -91,8 +92,6 @@ public class PlayMenu {
 		}
 
 	}
-
-
 
 	private String checkPosition(PlayDTO dto) {
 		String position = "";
@@ -121,7 +120,8 @@ public class PlayMenu {
 		System.out.println("============================================================");
 		System.out.println(dto.getPlayDays() + " 일차");
 		System.out.println("닉네임 : " + dto.getNickName() + "\t직급 : " + position);
-		System.out.println("경험치 : " + dto.getExperience() % 100 + "\t피로도 : " + dto.getHealth() +  "\t돈 : " + String.format("%,d", dto.getMoney()));
+		System.out.println("경험치 : " + dto.getExperience() % 100 + "\t피로도 : " + dto.getHealth() + "\t돈 : "
+				+ String.format("%,d", dto.getMoney()));
 		for (int i = 0; i < 10; i++) {
 			if ((dto.getExperience() % 100) / 10 > i) {
 				System.out.print("■");
@@ -175,8 +175,8 @@ public class PlayMenu {
 			qDto = qDao.makeQuiz(dto, random);
 			if (qDto != null) {
 				if (random == qDto.getQuizSq()) {
-					System.out.println("[" +
-							qDto.getQuizSq() + "번] " + "분야는 " + qDto.getQuizPart() + "문제 : " + qDto.getQuestion());
+					System.out.println("[" + qDto.getQuizSq() + "번] " + "분야는 " + qDto.getQuizPart() + "문제 : "
+							+ qDto.getQuestion());
 
 					System.out.print("답 입력>>");
 					String num = sc.next();
@@ -299,26 +299,26 @@ public class PlayMenu {
 		if (bfPosition != dto.getExperience() / 100)
 			System.out.println(updatePosition + "(으)로 진급하셨습니다.");
 	}
-	
+
 	private void updatePlayerInfo(PlayDTO dto, int bfExperience, int bfHealth, int bfMoney) {
 		int sumExp = dto.getExperience() - bfExperience;
 		int sumHealth = dto.getHealth() - bfHealth;
 		int sumMoney = dto.getMoney() - bfMoney;
-		
+
 		String plus = "+";
-		
+
 		if (dto.getExperience() == bfExperience) {
 			plus = "";
 		}
-		
+
 		if (dto.getHealth() == bfHealth) {
 			plus = "";
 		}
-		
+
 		if (dto.getMoney() == bfMoney) {
 			plus = "";
 		}
-		
+
 		System.out.println("------------------------------------------------------------");
 		System.out.print("경험치 : " + (sumExp > 0 ? plus + sumExp : sumExp));
 		System.out.print("\t피로도 : " + (sumHealth > 0 ? plus + sumHealth : sumHealth));
@@ -327,12 +327,16 @@ public class PlayMenu {
 		System.out.println("------------------------------------------------------------");
 	}
 
-	private boolean gameOver(PlayDTO dto) {
+	private boolean gameOver(PlayDTO dto, boolean eventGameOverFlag) {
 		boolean gameOverFlag = false;
 
 		if (dto.getHealth() >= 100 || dto.getMoney() <= 0 || dto.getPosition() == 4) {
 			gameOverFlag = true;
 			System.out.println("Game Over!!");
+		}
+
+		if (eventGameOverFlag == true) {
+			gameOverFlag = true;
 		}
 
 		return gameOverFlag;
@@ -344,323 +348,324 @@ public class PlayMenu {
 
 	}
 
-	private void callEvent(PlayDTO dto) {
+	private boolean callEvent(PlayDTO dto, boolean eventGameOverFlag) {
 		System.out.println("===== 이벤트 발생! =====");
 
-        EventDAO rDao = new EventDAO();
-        EventDTO rDto = rDao.ran();
+		EventDAO rDao = new EventDAO();
+		EventDTO rDto = rDao.ran();
 
-        if (rDto.getEventNumber() == 1) {
-           System.out.println(rDto.getEventNumber() + ". " + rDto.getEventText());
-           dto.setHealth(dto.getHealth() - 100);
-        }
+		if (rDto.getEventNumber() == 1) {
+			System.out.println(rDto.getEventNumber() + ". " + rDto.getEventText());
+			eventGameOverFlag = true;
+		}
 
-        else if (rDto.getEventNumber() >= 2 && rDto.getEventNumber() < 13) {
-           while (true) {
-              System.out.println(rDto.getEventText());
-              System.out.print(">>");
-              int num = sc.nextInt();
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setExperience(dto.getExperience() - 10);
-                 dto.setHealth(dto.getHealth() - 10);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setExperience(dto.getExperience() + 10);
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+		else if (rDto.getEventNumber() >= 2 && rDto.getEventNumber() < 13) {
+			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setExperience(dto.getExperience() - 10);
+					dto.setHealth(dto.getHealth() - 10);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setExperience(dto.getExperience() + 10);
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 13 && rDto.getEventNumber() < 23) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 13 && rDto.getEventNumber() < 23) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setExperience(dto.getExperience() + 10);
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setHealth(dto.getHealth() - 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setExperience(dto.getExperience() + 10);
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setHealth(dto.getHealth() - 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 23 && rDto.getEventNumber() < 33) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 23 && rDto.getEventNumber() < 33) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setMoney(dto.getMoney() - 50);
-                 dto.setHealth(dto.getHealth() - 10);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setMoney(dto.getMoney() - 50);
+					dto.setHealth(dto.getHealth() - 10);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 33 && rDto.getEventNumber() < 43) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 33 && rDto.getEventNumber() < 43) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setMoney(dto.getMoney() - 100);
-                 dto.setHealth(dto.getHealth() - 15);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setMoney(dto.getMoney() + 100);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setMoney(dto.getMoney() - 100);
+					dto.setHealth(dto.getHealth() - 15);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setMoney(dto.getMoney() + 100);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 43 && rDto.getEventNumber() < 49) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 43 && rDto.getEventNumber() < 49) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setMoney(dto.getMoney() + 100);
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        } else if (rDto.getEventNumber() >= 49 && rDto.getEventNumber() < 54) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setMoney(dto.getMoney() + 100);
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					eventGameOverFlag = true;
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		} else if (rDto.getEventNumber() >= 49 && rDto.getEventNumber() < 54) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setExperience(dto.getExperience() + 5);
-                 dto.setHealth(dto.getHealth() + 15);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					eventGameOverFlag = true;
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setExperience(dto.getExperience() + 5);
+					dto.setHealth(dto.getHealth() + 15);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 54 && rDto.getEventNumber() < 59) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 54 && rDto.getEventNumber() < 59) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() + 15);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setHealth(dto.getHealth() + 15);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					eventGameOverFlag = true;
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 59 && rDto.getEventNumber() < 64) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 59 && rDto.getEventNumber() < 64) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setExperience(dto.getExperience() + 10);
-                 dto.setHealth(dto.getHealth() + 15);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					eventGameOverFlag = true;
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setExperience(dto.getExperience() + 10);
+					dto.setHealth(dto.getHealth() + 15);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 64 && rDto.getEventNumber() < 74) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 64 && rDto.getEventNumber() < 74) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setMoney(dto.getMoney() + 50);
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					eventGameOverFlag = true;
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setMoney(dto.getMoney() + 50);
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 74 && rDto.getEventNumber() < 79) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 74 && rDto.getEventNumber() < 79) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        } else if (rDto.getEventNumber() >= 79 && rDto.getEventNumber() < 84) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					eventGameOverFlag = true;
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		} else if (rDto.getEventNumber() >= 79 && rDto.getEventNumber() < 84) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setMoney(dto.getMoney() + 50);
-                 dto.setHealth(dto.getHealth() - 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					eventGameOverFlag = true;
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setMoney(dto.getMoney() + 50);
+					dto.setHealth(dto.getHealth() - 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 84 && rDto.getEventNumber() < 89) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 84 && rDto.getEventNumber() < 89) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setMoney(dto.getMoney() - 50);
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setMoney(dto.getMoney() - 50);
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					eventGameOverFlag = true;
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 89 && rDto.getEventNumber() < 94) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 89 && rDto.getEventNumber() < 94) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setExperience(dto.getExperience() + 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					eventGameOverFlag = true;
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setExperience(dto.getExperience() + 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 94 && rDto.getEventNumber() < 99) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 94 && rDto.getEventNumber() < 99) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setHealth(dto.getHealth() - 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setExperience(dto.getExperience() + 15);
-                 dto.setHealth(dto.getHealth() + 10);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-        }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					eventGameOverFlag = true;
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setExperience(dto.getExperience() + 15);
+					dto.setHealth(dto.getHealth() + 10);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
 
-        else if (rDto.getEventNumber() >= 99 && rDto.getEventNumber() < 110) {
-           System.out.println(rDto.getEventText());
-           System.out.print(">>");
-           int num = sc.nextInt();
+		else if (rDto.getEventNumber() >= 99 && rDto.getEventNumber() < 110) {
+			System.out.println(rDto.getEventText());
+			System.out.print(">>");
+			int num = sc.nextInt();
 
-           while (true) {
-              if (num == 1) {
-                 System.out.println(rDto.getEventAns1());
-                 dto.setMoney(dto.getMoney() + 100);
-                 break;
-              } else if (num == 2) {
-                 System.out.println(rDto.getEbentAns2());
-                 dto.setExperience(dto.getExperience() + 20);
-                 dto.setMoney(dto.getMoney() + 50);
-                 break;
-              } else {
-                 System.out.println("다시 입력하시오.");
-              }
-           }
-          }
+			while (true) {
+				if (num == 1) {
+					System.out.println(rDto.getEventAns1());
+					dto.setMoney(dto.getMoney() + 100);
+					break;
+				} else if (num == 2) {
+					System.out.println(rDto.getEbentAns2());
+					dto.setExperience(dto.getExperience() + 20);
+					dto.setMoney(dto.getMoney() + 50);
+					break;
+				} else {
+					System.out.println("다시 입력하시오.");
+				}
+			}
+		}
+		return eventGameOverFlag;
 	}
 }
