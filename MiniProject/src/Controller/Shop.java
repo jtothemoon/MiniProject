@@ -13,13 +13,13 @@ public class Shop {
 		int num1 = 0;
 
 		if (choice == 1) {
-			dto.setMoney(dto.getMoney() - 250);
+			dto.setMoney(dto.getMoney() - 2500);
 			dto.setAddHealth(dto.getAddHealth() + 3);
 		} else if (choice == 2) {
-			dto.setMoney(dto.getMoney() - 250);
+			dto.setMoney(dto.getMoney() - 2500);
 			dto.setAddExperience(dto.getAddExperience() + 2);
 		} else if (choice == 3) {
-			dto.setMoney(dto.getMoney() - 80);
+			dto.setMoney(dto.getMoney() - 800);
 			dto.setAddMoney(dto.getAddMoney() + 3);
 		} else if (choice == 4) {
 			dto.setMoney(dto.getMoney() - 30);

@@ -25,7 +25,7 @@ public class PlayMenu {
 		MenuAscii mAscii = new MenuAscii();
 
 		boolean menuFlag = true;
-		boolean eventFlag[] = new boolean[2];
+		boolean eventFlag[] = new boolean[3];
 		boolean eventGameOverFlag = false;
 
 		int bfPosition = 0;
@@ -68,24 +68,26 @@ public class PlayMenu {
 				eventFlag = callRest(dto, eventFlag);
 				break;
 			case 5:
-				callShop(dto);
+				eventFlag = callShop(dto, eventFlag);
 				break;
 			case 6:
 				pDao.savePlayInfo(dto);
 				return;
 			}
 			
-			mAscii.menu(selectMenu);
+			if (eventFlag[2]) {
+				mAscii.menu(selectMenu);
+			}
 
 			if (eventFlag[0]) {
 				eventGameOverFlag = callEvent(dto, eventGameOverFlag);
 			}
-
+			
 			GameOverAscii goAscii = new GameOverAscii();
 			
 			if (gameOver(dto, eventGameOverFlag)) {
 				eventGameOverFlag = true;
-				goAscii.gameOver();
+				goAscii.gameOver(dto);
 				return;
 			}
 			updatePosition(dto, bfPosition);
@@ -175,6 +177,7 @@ public class PlayMenu {
 		if (b == 1) {
 			eventFlag[0] = true;
 			eventFlag[1] = true;
+			eventFlag[2] = true;
 			qDto = qDao.makeQuiz(dto, random);
 			if (qDto != null) {
 				if (random == qDto.getQuizSq()) {
@@ -245,22 +248,25 @@ public class PlayMenu {
 		return eventFlag;
 	}
 
-	private void callShop(PlayDTO dto) {
+	private boolean[] callShop(PlayDTO dto, boolean[] eventFlag) {
 		Shop sp = new Shop();
 
 		System.out.println("=====메뉴=====");
 		if (dto.getAddHealth() == 0)
-			System.out.println("1. 자동차(250원) : 일과 진행시 얻는 피로도를 3 감소시켜줍니다.");
+			System.out.println("1. 자동차(2500원) : 일과 진행시 얻는 피로도를 3 감소시켜줍니다.");
 		if (dto.getAddExperience() == 0)
-			System.out.println("2. 개인노트북(250원) : 일과 진행시 얻는 경험치를 2 올려줍니다.");
+			System.out.println("2. 개인노트북(2500원) : 일과 진행시 얻는 경험치를 2 올려줍니다.");
 		if (dto.getAddMoney() == 0)
-			System.out.println("3. 인센티브(80) : 일과 진행시 얻는 돈을 3 올려줍니다.");
+			System.out.println("3. 인센티브(800원) : 일과 진행시 얻는 돈을 3 올려줍니다.");
 		System.out.println("4. 피로회복제(30원) : 즉시 피로도를 10 감소시켜줍니다.");
 		System.out.println("5. 복권(30원) : 자신의 운을 시험하세요!");
 		System.out.println("6. 뒤로가기");
 		System.out.print(">>");
 
 		int choice = sc.nextInt();
+		if (choice != 6) {
+			eventFlag[2] = true;
+		}
 		int[] arr2 = new int[4];
 
 		if (choice == 5) {
@@ -295,7 +301,8 @@ public class PlayMenu {
 				System.out.println("사장으로 진급하였습니다.");
 			}
 		}
-
+		return eventFlag;
+		
 	}
 
 	private void updatePosition(PlayDTO dto, int bfPosition) {
@@ -337,11 +344,10 @@ public class PlayMenu {
 	private boolean gameOver(PlayDTO dto, boolean eventGameOverFlag) {
 		boolean gameOverFlag = false;
 
-		if (dto.getHealth() >= 100 || dto.getMoney() <= 0 || dto.getPosition() == 4) {
+		if (dto.getHealth() >= 100 || dto.getMoney() <= 0 || (dto.getExperience() / 100) == 4) {
 			gameOverFlag = true;
-			System.out.println("Game Over!!");
 		}
-
+		
 		if (eventGameOverFlag == true) {
 			gameOverFlag = true;
 		}
