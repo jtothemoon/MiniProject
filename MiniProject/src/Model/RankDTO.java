@@ -2,13 +2,15 @@ package Model;
 
 public class RankDTO {
 	private int rank;
+	private int rankSeq;
 	private String id;
 	private String nickName;
 	private int playDays;
 	private int money;
 	
-	public RankDTO(int rank, String id, String nickName, int playDays, int money) {
+	public RankDTO(int rank, int rankSeq, String id, String nickName, int playDays, int money) {
 		this.rank = rank;
+		this.rankSeq = rankSeq;
 		this.id = id;
 		this.nickName = nickName;
 		this.playDays = playDays;
@@ -23,6 +25,13 @@ public class RankDTO {
 		this.rank = rank;
 	}
 
+	public int getRankSeq() {
+		return rankSeq;
+	}
+
+	public void setRankSeq(int rankSeq) {
+		this.rankSeq = rankSeq;
+	}
 
 	public String getId() {
 		return id;

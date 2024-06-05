@@ -10,7 +10,7 @@ public class RankDAO extends UserDAO {
 		connect();
 
 		int row = 0;
-		String sql = "INSERT INTO TB_CW_RANK (ID, NICK_NAME, PLAY_DAYS, MONEY) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO TB_CW_RANK (RANK_SEQ, ID, NICK_NAME, PLAY_DAYS, MONEY) VALUES (RANK_SEQ.NEXTVAL, ?, ?, ?, ?)";
 
 		try {
 			psmt = conn.prepareStatement(sql);
@@ -41,7 +41,7 @@ public class RankDAO extends UserDAO {
 			rs = psmt.executeQuery();
 			
 			while (rs.next()) {
-				list.add(new RankDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5)));
+				list.add(new RankDTO(rs.getInt(1), 0, rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

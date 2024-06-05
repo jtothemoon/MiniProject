@@ -13,7 +13,7 @@ public class GameOverAscii implements Runnable {
 		
 		if ((dto.getExperience() / 100) == 4) {
 			happyEndingFlag = 1;
-			RankDTO rDto = new RankDTO(0, dto.getId(), dto.getNickName(), dto.getPlayDays(), dto.getMoney());
+			RankDTO rDto = new RankDTO(0, 0, dto.getId(), dto.getNickName(), dto.getPlayDays(), dto.getMoney());
 			RankDAO rDao = new RankDAO();
 			
 			rDao.insertPlayRankInfo(rDto);
