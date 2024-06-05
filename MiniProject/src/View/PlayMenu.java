@@ -21,6 +21,8 @@ public class PlayMenu {
 	public void selectPlayMenu(String userId) {
 		PlayDAO pDao = new PlayDAO();
 		PlayDTO dto = pDao.getPlayInfo(userId);
+		
+		MenuAscii mAscii = new MenuAscii();
 
 		boolean menuFlag = true;
 		boolean eventFlag[] = new boolean[2];
@@ -70,20 +72,23 @@ public class PlayMenu {
 				break;
 			case 6:
 				pDao.savePlayInfo(dto);
-				menuFlag = false;
-				break;
+				return;
 			}
+			
+			mAscii.menu(selectMenu);
 
 			if (eventFlag[0]) {
 				eventGameOverFlag = callEvent(dto, eventGameOverFlag);
 			}
 
-			updatePosition(dto, bfPosition);
-
-			if (gameOver(dto, eventGameOverFlag)) {
-				break;
-			}
+			GameOverAscii goAscii = new GameOverAscii();
 			
+			if (gameOver(dto, eventGameOverFlag)) {
+				eventGameOverFlag = true;
+				goAscii.gameOver();
+				return;
+			}
+			updatePosition(dto, bfPosition);
 			updatePlayerInfo(dto, bfExperience, bfHealth, bfMoney);
 
 			if (eventFlag[1]) {
@@ -149,8 +154,6 @@ public class PlayMenu {
 
 		if (b == 1) {
 			eventFlag = pg.work(dto);
-			System.out.println("=====업무중=====");
-			System.out.println("오늘도 칼퇴를 위해서!!!");
 		} else if (b == 2) {
 			return eventFlag;
 		}
@@ -212,6 +215,7 @@ public class PlayMenu {
 	}
 
 	private boolean[] callRest(PlayDTO dto, boolean[] eventFlag) {
+		RestAscii rAscii = new RestAscii();
 		System.out.println("집에 도착하셨습니다. 무엇을 하시겠습니까? ");
 		System.out.println("");
 		System.out.print("[1] 집에서 쉬기 [2] 여행가기 [3] 뒤로가기");
@@ -235,6 +239,9 @@ public class PlayMenu {
 		} else {
 			return eventFlag;
 		}
+		
+		rAscii.rest(a);
+		
 		return eventFlag;
 	}
 
@@ -292,12 +299,12 @@ public class PlayMenu {
 	}
 
 	private void updatePosition(PlayDTO dto, int bfPosition) {
-		String updatePosition = "";
-		updatePosition = checkPosition(dto);
+		PositionAscii pAscii = new PositionAscii();
+		
 		dto.setHealth(dto.getHealth() < 0 ? 0 : dto.getHealth());
 		dto.setPosition(dto.getExperience() / 100);
 		if (bfPosition != dto.getExperience() / 100)
-			System.out.println(updatePosition + "(으)로 진급하셨습니다.");
+			pAscii.position(dto.getPosition());
 	}
 
 	private void updatePlayerInfo(PlayDTO dto, int bfExperience, int bfHealth, int bfMoney) {
@@ -381,11 +388,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 13 && rDto.getEventNumber() < 23) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setExperience(dto.getExperience() + 10);
@@ -402,11 +408,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 23 && rDto.getEventNumber() < 33) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() - 50);
@@ -423,11 +428,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 33 && rDto.getEventNumber() < 43) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() - 100);
@@ -444,11 +448,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 43 && rDto.getEventNumber() < 49) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() + 100);
@@ -463,11 +466,10 @@ public class PlayMenu {
 				}
 			}
 		} else if (rDto.getEventNumber() >= 49 && rDto.getEventNumber() < 54) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -484,11 +486,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 54 && rDto.getEventNumber() < 59) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setHealth(dto.getHealth() + 15);
@@ -504,11 +505,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 59 && rDto.getEventNumber() < 64) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -525,11 +525,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 64 && rDto.getEventNumber() < 74) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -546,11 +545,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 74 && rDto.getEventNumber() < 79) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setHealth(dto.getHealth() + 10);
@@ -564,11 +562,10 @@ public class PlayMenu {
 				}
 			}
 		} else if (rDto.getEventNumber() >= 79 && rDto.getEventNumber() < 84) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -585,11 +582,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 84 && rDto.getEventNumber() < 89) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() - 50);
@@ -606,11 +602,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 89 && rDto.getEventNumber() < 94) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -626,11 +621,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 94 && rDto.getEventNumber() < 99) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					eventGameOverFlag = true;
@@ -647,11 +641,10 @@ public class PlayMenu {
 		}
 
 		else if (rDto.getEventNumber() >= 99 && rDto.getEventNumber() < 110) {
-			System.out.println(rDto.getEventText());
-			System.out.print(">>");
-			int num = sc.nextInt();
-
 			while (true) {
+				System.out.println(rDto.getEventText());
+				System.out.print(">>");
+				int num = sc.nextInt();
 				if (num == 1) {
 					System.out.println(rDto.getEventAns1());
 					dto.setMoney(dto.getMoney() + 100);
