@@ -78,7 +78,6 @@ public class PlayMenu {
 				break;
 			case 6:
 				pDao.savePlayInfo(dto);
-				mp3.stop();
 				return 0;
 			}
 
@@ -234,8 +233,6 @@ public class PlayMenu {
 
 		if (b == 1) {
 			eventFlag = pg.businessTrip(dto);
-			System.out.println("=====출장 업무중=====");
-			System.out.println("오늘은 출장업무네... 얼른 끝내고 집에 가자!!");
 		} else if (b == 2) {
 			return eventFlag;
 		}
@@ -255,7 +252,6 @@ public class PlayMenu {
 		if (a == 1) {
 			eventFlag = pg.rest(dto, a);
 			System.out.println("");
-			System.out.println("집에서 쉬기를 선택하셨습니다.  역시 집이 최고네요!!");
 		} else if (a == 2) {
 			if (dto.getMoney() < 100) {
 				System.out.println("가지고 계신 돈이 없어서 여행을 갈 수 없어요 ㅠㅠ");
@@ -263,7 +259,6 @@ public class PlayMenu {
 				System.out.println("다시 선택해주세요.");
 			} else {
 				eventFlag = pg.rest(dto, a);
-				System.out.println("여행을 선택하셨습니다. 힐링 귣!");
 			}
 		} else {
 			return eventFlag;

@@ -13,7 +13,7 @@ public class Outro implements Runnable {
 			"\t\t\t제작 지원\t 스마트인재개발원", 
 			"\t\t\t장소 협찬\t 클라우드 3차 6교육실",
 			"\t\tThanks to 채 수 민, 조 준 용, 서 보 경, 이 도 연", 
-			"\t\t\t 제작\t사장과 전쟁", };
+			"\t\t\t제작\t사장과 전쟁", };
 
 	@Override
 	public void run() {

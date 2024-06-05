@@ -18,7 +18,6 @@ public class LoginMenu {
 		boolean loginFlag = true;
 		
 		String txt = "끄기";
-		boolean bgmOffFlag = true;
 
 		titleText();
 
@@ -139,12 +138,10 @@ public class LoginMenu {
 				}
 				break;
 			case 5:
-				if (bgmOffFlag) {
-					bgmOffFlag = false;
+				if (mp3.isPlaying()) {
 					txt = "켜기";
 					mp3.stop();
 				} else {
-					bgmOffFlag = true;
 					txt = "끄기";
 					mp3.play(".\\player\\bgm.mp3");
 				}

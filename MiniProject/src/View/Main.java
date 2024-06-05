@@ -12,17 +12,11 @@ public class Main {
 		
 		while (true) {
 			LoginMenu lMenu = new LoginMenu();
-			mp3.play(".\\player\\bgm.mp3");
+			if (!mp3.isPlaying()) mp3.play(".\\player\\bgm.mp3");
+			
 			String userId = lMenu.selectLoginMenu(mp3);
 			
 			if(userId.equals("")) {
-				System.out.println();
-				System.out.println();
-				Outro r2 = new Outro();
-				Thread t2 = new Thread(r2);
-				mp3.stop();
-				mp3.play(".\\player\\end.mp3");
-				t2.run();
 				mp3.stop();
 				return;
 			}
