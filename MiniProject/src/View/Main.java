@@ -5,7 +5,7 @@ import Controller.PlayDAO;
 public class Main {
 
 	public static void main(String[] args) {
-		boolean happyEndingFlag = false;
+		int happyEndingFlag = 0;
 		
 		while (true) {
 			LoginMenu lMenu = new LoginMenu();
@@ -23,15 +23,18 @@ public class Main {
 			
 			if (dao.getPlayInfo(userId) != null) {
 				happyEndingFlag = pMenu.selectPlayMenu(userId);
-				GameOverAscii r1 = new GameOverAscii();
-				Thread t1 = new Thread(r1);
-				t1.run();
 			}
 			
-			if (happyEndingFlag == true) {
+			if (happyEndingFlag == 1) {
 				Outro r2 = new Outro();
 				Thread t2 = new Thread(r2);
 				t2.run();
+			} else if(happyEndingFlag == 2) {
+				GameOverAscii r1 = new GameOverAscii();
+				Thread t1 = new Thread(r1);
+				t1.run();
+			} else {
+				continue;
 			}
 			
 		}

@@ -25,7 +25,7 @@ public class Shop {
 			dto.setMoney(dto.getMoney() - 30);
 			dto.setHealth(dto.getHealth() - 10);
 		} else if (choice == 5) {
-			dto.setMoney(dto.getMoney() - 30);
+			dto.setMoney(dto.getMoney() - 300);
 			int[] arr = new int[4];
 
 			for (int i = 0; i < 4; i++) {

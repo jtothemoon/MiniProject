@@ -3,13 +3,13 @@ package View;
 import Model.PlayDTO;
 
 public class GameOverAscii implements Runnable {
-	public boolean gameOver(PlayDTO dto) {
-		boolean happyEndingFlag = false;
+	public int gameOver(PlayDTO dto) {
+		int happyEndingFlag = 0;
 		
 		System.out.println();
 		
 		if ((dto.getExperience() / 100) == 4) {
-			happyEndingFlag = true;
+			happyEndingFlag = 1;
 			System.out.println("□■■■■■■■■■■□□□□□■■■■□□□■□■□□□□□□■■■■□□□■\r\n"
 					+ "□□□■■□□■■□□□□□□□■■■■□□□■□■□□□□□■■■■■■□□■\r\n" + "□□□■■□□■■□□□□□□□□□□■□□□■□■□□□□□■■□□■■□□■\r\n"
 					+ "□■■■■■■■■■■□□□□□□□□■□□□■□■□□□□□■■□□■■□□■\r\n" + "□□□□□□□□□□□□□□□□■■■■□■■■□■□□□□□■□□□□■□□■\r\n"
@@ -45,6 +45,7 @@ public class GameOverAscii implements Runnable {
 					+ "□□□■□□□□□■□□□□□□□□□□□□□□■□□□□□□□□■■□□□□■□□□□□□□□□□□□□□□■□□□□□□□□□□□□□□■□□\r\n"
 					+ "□□□■■■■■■■□□□□□□□□□□□□□□■□□□□□□□□■■■■■■■□□□□□□□□□□□□□□□■□□□□□□□□□□□□□□■□□");
 		} else {
+			happyEndingFlag = 2;
 			System.out.println(" ██████╗      █████╗     ███╗   ███╗    ███████╗         ██████╗     ██╗   ██╗    ███████╗    ██████╗ \r\n"
 					+ "██╔════╝     ██╔══██╗    ████╗ ████║    ██╔════╝        ██╔═══██╗    ██║   ██║    ██╔════╝    ██╔══██╗\r\n"
 					+ "██║  ███╗    ███████║    ██╔████╔██║    █████╗          ██║   ██║    ██║   ██║    █████╗      ██████╔╝\r\n"

@@ -18,7 +18,7 @@ public class PlayMenu {
 	Scanner sc = new Scanner(System.in);
 	PlayGame pg = new PlayGame();
 
-	public boolean selectPlayMenu(String userId) {
+	public int selectPlayMenu(String userId) {
 		PlayDAO pDao = new PlayDAO();
 		PlayDTO dto = pDao.getPlayInfo(userId);
 
@@ -33,7 +33,7 @@ public class PlayMenu {
 
 		int bfExperience, bfHealth, bfMoney;
 		
-		boolean happyEndingFlag = false;
+		int happyEndingFlag = 0; // 0: 그냥종료 1: 해피엔딩 2: 게임종료
 
 		System.out.println("게임을 시작합니다.");
 
@@ -74,7 +74,7 @@ public class PlayMenu {
 				break;
 			case 6:
 				pDao.savePlayInfo(dto);
-				return happyEndingFlag;
+				return 0;
 			}
 
 			if (eventFlag[2]) {
@@ -262,7 +262,7 @@ public class PlayMenu {
 		if (dto.getAddMoney() == 0)
 			System.out.println("3. 인센티브(800원) : 일과 진행시 얻는 돈을 3 올려줍니다.");
 		System.out.println("4. 피로회복제(30원) : 즉시 피로도를 10 감소시켜줍니다.");
-		System.out.println("5. 복권(30원) : 자신의 운을 시험하세요!");
+		System.out.println("5. 복권(300원) : 자신의 운을 시험하세요!");
 		System.out.println("6. 뒤로가기");
 		System.out.print(">>");
 
