@@ -18,7 +18,7 @@ public class PlayMenu {
 	Scanner sc = new Scanner(System.in);
 	PlayGame pg = new PlayGame();
 
-	public void selectPlayMenu(String userId) {
+	public boolean selectPlayMenu(String userId) {
 		PlayDAO pDao = new PlayDAO();
 		PlayDTO dto = pDao.getPlayInfo(userId);
 
@@ -32,6 +32,8 @@ public class PlayMenu {
 		String position = "";
 
 		int bfExperience, bfHealth, bfMoney;
+		
+		boolean happyEndingFlag = false;
 
 		System.out.println("게임을 시작합니다.");
 
@@ -72,7 +74,7 @@ public class PlayMenu {
 				break;
 			case 6:
 				pDao.savePlayInfo(dto);
-				return;
+				return happyEndingFlag;
 			}
 
 			if (eventFlag[2]) {
@@ -84,11 +86,11 @@ public class PlayMenu {
 			}
 
 			GameOverAscii goAscii = new GameOverAscii();
-
+			
 			if (gameOver(dto, eventGameOverFlag)) {
 				eventGameOverFlag = true;
-				goAscii.gameOver(dto);
-				return;
+				happyEndingFlag = goAscii.gameOver(dto);
+				return happyEndingFlag;
 			}
 			updatePosition(dto, bfPosition);
 			updatePlayerInfo(dto, bfExperience, bfHealth, bfMoney);
@@ -97,6 +99,7 @@ public class PlayMenu {
 				updatePlayDays(dto, selectMenu);
 			}
 		}
+		return happyEndingFlag;
 
 	}
 
@@ -667,4 +670,5 @@ public class PlayMenu {
 		}
 		return eventGameOverFlag;
 	}
+
 }
