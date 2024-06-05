@@ -21,7 +21,7 @@ public class PlayMenu {
 	public void selectPlayMenu(String userId) {
 		PlayDAO pDao = new PlayDAO();
 		PlayDTO dto = pDao.getPlayInfo(userId);
-		
+
 		MenuAscii mAscii = new MenuAscii();
 
 		boolean menuFlag = true;
@@ -74,7 +74,7 @@ public class PlayMenu {
 				pDao.savePlayInfo(dto);
 				return;
 			}
-			
+
 			if (eventFlag[2]) {
 				mAscii.menu(selectMenu);
 			}
@@ -82,9 +82,9 @@ public class PlayMenu {
 			if (eventFlag[0]) {
 				eventGameOverFlag = callEvent(dto, eventGameOverFlag);
 			}
-			
+
 			GameOverAscii goAscii = new GameOverAscii();
-			
+
 			if (gameOver(dto, eventGameOverFlag)) {
 				eventGameOverFlag = true;
 				goAscii.gameOver(dto);
@@ -127,8 +127,7 @@ public class PlayMenu {
 		System.out.println("============================================================");
 		System.out.println(dto.getPlayDays() + " 일차");
 		System.out.println("닉네임 : " + dto.getNickName() + "\t직급 : " + position);
-		System.out.println("경험치 : " + dto.getExperience() % 100 + "\t피로도 : " + dto.getHealth() + "\t돈 : "
-				+ String.format("%,d", dto.getMoney()));
+		System.out.println("경험치 : " + dto.getExperience() % 100 + "\t돈 : " + String.format("%,d", dto.getMoney()));
 		for (int i = 0; i < 10; i++) {
 			if ((dto.getExperience() % 100) / 10 > i) {
 				System.out.print("■");
@@ -136,7 +135,8 @@ public class PlayMenu {
 				System.out.print("□");
 			}
 		}
-		System.out.print("\t");
+		System.out.println();
+		System.out.println("피로도 : " + dto.getHealth());
 		for (int i = 0; i < 10; i++) {
 			if (dto.getHealth() / 10 > i) {
 				System.out.print("■");
@@ -242,9 +242,9 @@ public class PlayMenu {
 		} else {
 			return eventFlag;
 		}
-		
+
 		rAscii.rest(a);
-		
+
 		return eventFlag;
 	}
 
@@ -302,12 +302,12 @@ public class PlayMenu {
 			}
 		}
 		return eventFlag;
-		
+
 	}
 
 	private void updatePosition(PlayDTO dto, int bfPosition) {
 		PositionAscii pAscii = new PositionAscii();
-		
+
 		dto.setHealth(dto.getHealth() < 0 ? 0 : dto.getHealth());
 		dto.setPosition(dto.getExperience() / 100);
 		if (bfPosition != dto.getExperience() / 100)
@@ -347,7 +347,7 @@ public class PlayMenu {
 		if (dto.getHealth() >= 100 || dto.getMoney() <= 0 || (dto.getExperience() / 100) == 4) {
 			gameOverFlag = true;
 		}
-		
+
 		if (eventGameOverFlag == true) {
 			gameOverFlag = true;
 		}
