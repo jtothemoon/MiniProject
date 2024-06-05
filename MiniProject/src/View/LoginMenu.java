@@ -1,8 +1,11 @@
 package View;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import Controller.RankDAO;
 import Controller.UserDAO;
+import Model.RankDTO;
 import Model.UserDTO;
 import javazoom.jl.player.MP3Player;
 
@@ -10,7 +13,7 @@ public class LoginMenu {
 
 	public String selectLoginMenu(MP3Player mp3) {
 		Scanner sc = new Scanner(System.in);
-		
+
 		UserDTO dto = new UserDTO(null, null, null, null);
 		UserDAO dao = new UserDAO();
 		LoginAscii lAscii = new LoginAscii();
@@ -18,13 +21,13 @@ public class LoginMenu {
 		String userId, pw, name, email;
 		String saveUserId, saveEmail;
 		boolean loginFlag = true;
-		
+
 		String txt = "끄기";
 
 		lAscii.titleText();
 
 		while (loginFlag) {
-			System.out.print("[1] 회원가입 [2] 로그인 [3] 비밀번호 변경 [4] 회원탈퇴 [5] BGM" + txt + " [6] 종료 : ");
+			System.out.print("[1] 회원가입 [2] 로그인 [3] 비밀번호 변경 [4] 회원탈퇴 [5] 랭킹 [6] BGM" + txt + " [7] 종료 : ");
 			int sMenu;
 
 			sMenu = checkInputValid(sc);
@@ -140,6 +143,18 @@ public class LoginMenu {
 				}
 				break;
 			case 5:
+				RankDAO rDao = new RankDAO();
+				ArrayList<RankDTO> list = rDao.selectRankAll();
+				System.out.println("-----------------------------------------");
+				System.out.println("|순위\t|ID\t|닉네임\t|클리어\t|돈\t|");
+				System.out.println("-----------------------------------------");
+				for (RankDTO rankDTO : list) {
+					System.out.println("|" + rankDTO.getRank() + "\t|" + rankDTO.getId() + "\t|" + rankDTO.getNickName() + "\t|"
+							+ rankDTO.getPlayDays() + "일\t|" + rankDTO.getMoney() + "\t|");
+				}
+				System.out.println("-----------------------------------------");
+				break;
+			case 6:
 				if (mp3.isPlaying()) {
 					txt = "켜기";
 					mp3.stop();
@@ -148,7 +163,7 @@ public class LoginMenu {
 					mp3.play(".\\player\\bgm.mp3");
 				}
 				break;
-			case 6:
+			case 7:
 				loginFlag = false;
 				return "";
 			}
@@ -159,7 +174,7 @@ public class LoginMenu {
 
 	private int checkInputValid(Scanner sc) {
 		int sMenu;
-		
+
 		while (!sc.hasNextInt()) {
 			sc.next();
 			System.err.print("에러! 숫자가 아닙니다. \n재 선택 : ");

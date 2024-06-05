@@ -1,6 +1,9 @@
 package View;
 
+import Controller.PlayDAO;
+import Controller.RankDAO;
 import Model.PlayDTO;
+import Model.RankDTO;
 
 public class GameOverAscii implements Runnable {
 	public int gameOver(PlayDTO dto) {
@@ -10,6 +13,15 @@ public class GameOverAscii implements Runnable {
 		
 		if ((dto.getExperience() / 100) == 4) {
 			happyEndingFlag = 1;
+			RankDTO rDto = new RankDTO(0, dto.getId(), dto.getNickName(), dto.getPlayDays(), dto.getMoney());
+			RankDAO rDao = new RankDAO();
+			
+			rDao.insertPlayRankInfo(rDto);
+			
+			PlayDAO pDao = new PlayDAO();
+			dto = new PlayDTO(dto.getId(), dto.getNickName(), 0, 0, 1000, 0, 0, 0, 0, 1);
+			pDao.resetPlayerInfo(dto);
+			
 			System.out.println("□■■■■■■■■■■□□□□□■■■■□□□■□■□□□□□□■■■■□□□■\r\n"
 					+ "□□□■■□□■■□□□□□□□■■■■□□□■□■□□□□□■■■■■■□□■\r\n" + "□□□■■□□■■□□□□□□□□□□■□□□■□■□□□□□■■□□■■□□■\r\n"
 					+ "□■■■■■■■■■■□□□□□□□□■□□□■□■□□□□□■■□□■■□□■\r\n" + "□□□□□□□□□□□□□□□□■■■■□■■■□■□□□□□■□□□□■□□■\r\n"

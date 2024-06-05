@@ -104,7 +104,36 @@ public class PlayDAO extends UserDAO {
 
 		return dto;
 	}
+	
+	public int resetPlayerInfo(PlayDTO dto) {
+		connect();
 
+		int row = 0;
+		String sql = "UPDATE TB_CW_PLAY SET POSITION = ?, EXPERIENCE = ?, MONEY = ?, HEALTH = ?, ADD_EXPERIENCE = ?, ADD_MONEY = ?, ADD_HEALTH = ?, PLAY_DAYS = ? WHERE ID = ?";
+
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, dto.getPosition());
+			psmt.setInt(2, dto.getExperience());
+			psmt.setInt(3, dto.getMoney());
+			psmt.setInt(4, dto.getHealth());
+			psmt.setInt(5, dto.getAddExperience());
+			psmt.setInt(6, dto.getAddMoney());
+			psmt.setInt(7, dto.getAddHealth());
+			psmt.setInt(8, dto.getPlayDays());
+			
+			psmt.setString(9, dto.getId());
+
+			row = psmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+
+		return row;
+	}
+	
 	@Override
 	public void connect() {
 		// TODO Auto-generated method stub
@@ -116,4 +145,6 @@ public class PlayDAO extends UserDAO {
 		// TODO Auto-generated method stub
 		super.close();
 	}
+
+	
 }
