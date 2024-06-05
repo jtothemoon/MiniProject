@@ -12,13 +12,14 @@ import Controller.Shop;
 import Model.EventDTO;
 import Model.PlayDTO;
 import Model.QuizDTO;
+import javazoom.jl.player.MP3Player;
 
 public class PlayMenu {
 
 	Scanner sc = new Scanner(System.in);
 	PlayGame pg = new PlayGame();
 
-	public int selectPlayMenu(String userId) {
+	public int selectPlayMenu(String userId, MP3Player mp3) {
 		PlayDAO pDao = new PlayDAO();
 		PlayDTO dto = pDao.getPlayInfo(userId);
 
@@ -77,6 +78,7 @@ public class PlayMenu {
 				break;
 			case 6:
 				pDao.savePlayInfo(dto);
+				mp3.stop();
 				return 0;
 			}
 

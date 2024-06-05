@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 import Controller.UserDAO;
 import Model.UserDTO;
+import javazoom.jl.player.MP3Player;
 
 public class LoginMenu {
 
-	public String selectLoginMenu() {
+	public String selectLoginMenu(MP3Player mp3) {
 		Scanner sc = new Scanner(System.in);
 		UserDTO dto = new UserDTO(null, null, null, null);
 		UserDAO dao = new UserDAO();
@@ -15,11 +16,14 @@ public class LoginMenu {
 		String userId, pw, name, email;
 		String saveUserId, saveEmail;
 		boolean loginFlag = true;
+		
+		String txt = "끄기";
+		boolean bgmOffFlag = true;
 
 		titleText();
 
 		while (loginFlag) {
-			System.out.print("[1] 회원가입 [2] 로그인 [3] 비밀번호 변경 [4] 회원탈퇴 [5] 종료 : ");
+			System.out.print("[1] 회원가입 [2] 로그인 [3] 비밀번호 변경 [4] 회원탈퇴 [5] BGM" + txt + " [6] 종료 : ");
 			int sMenu;
 
 			sMenu = checkInputValid(sc);
@@ -135,6 +139,17 @@ public class LoginMenu {
 				}
 				break;
 			case 5:
+				if (bgmOffFlag) {
+					bgmOffFlag = false;
+					txt = "켜기";
+					mp3.stop();
+				} else {
+					bgmOffFlag = true;
+					txt = "끄기";
+					mp3.play(".\\player\\bgm.mp3");
+				}
+				break;
+			case 6:
 				loginFlag = false;
 				return "";
 			}
