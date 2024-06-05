@@ -5,7 +5,7 @@ public class Outro implements Runnable {
 	String[] str = { "\t\t\t  [Ending Credit]", 
 			"\t\t\t\tCast",
 			"\t\t[PM] 프로젝트 관리자, PPT 및 발표\t송 창 희", 
-			"\t\t[PL] 프로젝트 리더, 메인 프로그래머\t임 현 진", 
+			"\t\t[PL] 프로젝트 리더, 메인 개발자\t임 현 진", 
 			"\t\t[PE] 개발자, 이벤트 설계 및 구현\t류 형 욱",
 			"\t\t[PE] 개발자, 상점 설계 및 구현\t배 지 환",
 			"\t\t[PE] 개발자, 퀴즈 설계 및 구현\t김 기 백", 
