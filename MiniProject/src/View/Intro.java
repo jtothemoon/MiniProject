@@ -130,7 +130,7 @@ public class Intro {
 		PlayDTO dto = new PlayDTO(userId, nickName, 0, 0, 1000, 0, 0, 0, 0, 1);
 		PlayDAO dao = new PlayDAO();
 		
-		row = dao.insertPlayInfo(dto);
+		row = dao.insertPlayInfo(dto); //게임 플레이 데이터 최초 적재
 		if(row > 0) System.out.println("입력하신 닉네임은 " + nickName + "입니다.");
 	}
 	

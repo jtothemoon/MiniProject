@@ -33,7 +33,7 @@ public class LoginMenu {
 			sMenu = checkInputValid(sc);
 
 			switch (sMenu) {
-			case 1:
+			case 1: //회원가입
 				while (true) {
 					System.out.print("ID : ");
 					userId = sc.next();
@@ -73,7 +73,7 @@ public class LoginMenu {
 				if (row > 0)
 					lAscii.joinText();
 				break;
-			case 2:
+			case 2: //로그인
 				System.out.print("ID : ");
 				userId = sc.next();
 				System.out.print("PW : ");
@@ -88,7 +88,7 @@ public class LoginMenu {
 				} else {
 					return userId;
 				}
-			case 3:
+			case 3: //비밀번호 변경
 				System.out.print("NAME : ");
 				name = sc.next();
 				System.out.print("EMAIL : ");
@@ -115,7 +115,7 @@ public class LoginMenu {
 				}
 
 				break;
-			case 4:
+			case 4: //로그인
 				System.out.print("ID : ");
 				userId = sc.next();
 				System.out.print("PW : ");
@@ -142,7 +142,7 @@ public class LoginMenu {
 					}
 				}
 				break;
-			case 5:
+			case 5: //랭킹
 				RankDAO rDao = new RankDAO();
 				ArrayList<RankDTO> list = rDao.selectRankAll();
 				System.out.println("-----------------------------------------");
@@ -154,7 +154,7 @@ public class LoginMenu {
 				}
 				System.out.println("-----------------------------------------");
 				break;
-			case 6:
+			case 6: //BGM 켜기/끄기
 				if (mp3.isPlaying()) {
 					txt = "켜기";
 					mp3.stop();
@@ -163,7 +163,7 @@ public class LoginMenu {
 					mp3.play(".\\player\\bgm.mp3");
 				}
 				break;
-			case 7:
+			case 7: //종료
 				loginFlag = false;
 				return "";
 			}

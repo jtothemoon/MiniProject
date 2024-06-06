@@ -26,15 +26,15 @@ public class PlayMenu {
 		MenuAscii mAscii = new MenuAscii();
 
 		boolean menuFlag = true;
-		boolean eventFlag[] = new boolean[3];
+		boolean eventFlag[] = new boolean[3]; //이벤트(0: 랜덤이벤트 발생여부, 1: 하루경과 여부 - 상점, 종료 제외, 2: 스케쥴 실행 여부)
 		boolean eventGameOverFlag = false;
 
 		int bfPosition = 0;
 		String position = "";
 
-		int bfExperience, bfHealth, bfMoney;
+		int bfExperience, bfHealth, bfMoney; //변경전 능력치 변수
 
-		int happyEndingFlag = 0; // 0: 그냥종료 1: 해피엔딩 2: 게임종료
+		int happyEndingFlag = 0; //해피엔딩여부(0:해피엔딩, 1:게임오버, 2:종료)
 
 		System.out.println("게임을 시작합니다.");
 
@@ -57,49 +57,49 @@ public class PlayMenu {
 			selectMenu = checkInputValid(sc);
 
 			switch (selectMenu) {
-			case 1:
+			case 1: //업무
 				eventFlag = callWork(dto, eventFlag);
 				break;
-			case 2:
+			case 2: //교육
 				eventFlag = callQuiz(dto, eventFlag);
 				break;
-			case 3:
+			case 3: //출장
 				eventFlag = callBusinessTrip(dto, eventFlag);
 				break;
-			case 4:
+			case 4: //휴식
 				if (dto.getHealth() == 0) {
 					System.out.println("당신은 팔팔한 상태에요!!!!!");
 					break;
 				}
 				eventFlag = callRest(dto, eventFlag);
 				break;
-			case 5:
+			case 5: //상점
 				eventFlag = callShop(dto, eventFlag);
 				break;
-			case 6:
+			case 6: //종료(게임플레이 데이터 저장)
 				pDao.savePlayInfo(dto);
 				return 0;
 			}
 
-			if (eventFlag[2]) {
+			if (eventFlag[2]) { //스케쥴 실행 여부
 				mAscii.menu(selectMenu);
 			}
 
-			if (eventFlag[0]) {
+			if (eventFlag[0]) { //랜덤이벤트 발생여부
 				eventGameOverFlag = callEvent(dto, eventGameOverFlag);
 			}
 
 			GameOverAscii goAscii = new GameOverAscii();
 
-			if (gameOver(dto, eventGameOverFlag)) {
+			if (gameOver(dto, eventGameOverFlag)) { //게임오버여부(해피 엔딩 포함)
 				eventGameOverFlag = true;
 				happyEndingFlag = goAscii.gameOver(dto);
 				return happyEndingFlag;
 			}
-			updatePosition(dto, bfPosition);
-			updatePlayerInfo(dto, bfExperience, bfHealth, bfMoney);
+			updatePosition(dto, bfPosition); //경험치로 직급 계산
+			updatePlayerInfo(dto, bfExperience, bfHealth, bfMoney); //변경전 능력치와 스케쥴 실행 후 능력치 비교해서 출력
 
-			if (eventFlag[1]) {
+			if (eventFlag[1]) { //하루 경과 여부(상점 제외하고 업데이트)
 				updatePlayDays(dto, selectMenu);
 			}
 		}
