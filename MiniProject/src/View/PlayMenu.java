@@ -290,6 +290,34 @@ public class PlayMenu {
 		if (choice != 6) {
 			eventFlag[2] = true;
 		}
+		
+		int playerMoney = dto.getMoney();
+		int shopMoney = 0;
+		
+		switch (choice) {
+		case 1:
+			shopMoney = 2500;
+			break;
+		case 2:
+			shopMoney = 2500;
+			break;
+		case 3:
+			shopMoney = 800;
+			break;
+		case 4:
+			shopMoney = 30;
+			break;
+		case 5:
+			shopMoney = 300;
+			break;
+		}
+		
+		if (playerMoney - shopMoney < 0) {
+			System.out.println("금액이 부족합니다.");
+			eventFlag[2] = false;
+			return eventFlag;
+		}
+		
 		int[] arr2 = new int[4];
 
 		if (choice == 5) {
@@ -320,6 +348,7 @@ public class PlayMenu {
 				System.out.println("돈을 1000원 획득하였습니다.");
 			} else if (num == 4) {
 				dto.setPosition(4);
+				dto.setExperience(400);
 				System.out.println("축하합니다!!! 4개 맞추셨습니다.");
 				System.out.println("사장으로 진급하였습니다.");
 			}

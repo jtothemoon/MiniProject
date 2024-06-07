@@ -11,7 +11,7 @@ public class Shop {
 		Random rd = new Random();
 
 		int num1 = 0;
-
+		
 		if (choice == 1) {
 			dto.setMoney(dto.getMoney() - 2500);
 			dto.setAddHealth(dto.getAddHealth() + 3);
