@@ -297,7 +297,7 @@ public class PlayMenu {
 
 			for (int i = 0; i < 4; i++) {
 				System.out.print("10이하의 숫자를 4개 입력하세요 >> ");
-				arr2[i] = sc.nextInt();
+				arr2[i] = sc.nextInt();	
 			}
 		}
 
