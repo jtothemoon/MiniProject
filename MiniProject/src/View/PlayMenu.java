@@ -91,12 +91,14 @@ public class PlayMenu {
 
 			GameOverAscii goAscii = new GameOverAscii();
 
+			updatePosition(dto, bfPosition); //경험치로 직급 계산
+			
 			if (gameOver(dto, eventGameOverFlag)) { //게임오버여부(해피 엔딩 포함)
 				eventGameOverFlag = true;
 				happyEndingFlag = goAscii.gameOver(dto);
 				return happyEndingFlag;
 			}
-			updatePosition(dto, bfPosition); //경험치로 직급 계산
+			
 			updatePlayerInfo(dto, bfExperience, bfHealth, bfMoney); //변경전 능력치와 스케쥴 실행 후 능력치 비교해서 출력
 
 			if (eventFlag[1]) { //하루 경과 여부(상점 제외하고 업데이트)
