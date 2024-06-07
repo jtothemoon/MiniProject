@@ -35,10 +35,10 @@ public class PlayGame {
 	public boolean[] rest(PlayDTO dto, int a) {
 		boolean[] eventFlag = new boolean[3];
 		
-		if (a == 1) {
-			dto.setHealth(dto.getHealth() - 10);
-		} else {
+		if (a == 1) { // 집에서 휴식
 			dto.setHealth(dto.getHealth() - 20);
+		} else { //여행가기
+			dto.setHealth(dto.getHealth() - 30);
 			dto.setMoney(dto.getMoney() - 100);
 		}
 		

@@ -296,7 +296,7 @@ public class PlayMenu {
 			System.out.println("복권을 구매하셨습니다. ");
 
 			for (int i = 0; i < 4; i++) {
-				System.out.print("5이하의 숫자를 입력하세요 >> ");
+				System.out.print("10이하의 숫자를 4개 입력하세요 >> ");
 				arr2[i] = sc.nextInt();
 			}
 		}
@@ -312,12 +312,12 @@ public class PlayMenu {
 				System.out.println("경험치 20을 획득하였습니다.");
 			} else if (num == 2) {
 				System.out.println("축하합니다!!! 2개 맞추셨습니다.");
-				dto.setHealth(dto.getHealth() - 20);
-				System.out.println("피로도가 20 감소하였습니다.");
+				dto.setHealth(dto.getHealth() - 30);
+				System.out.println("피로도가 30 감소하였습니다.");
 			} else if (num == 3) {
 				System.out.println("축하합니다!!! 3개 맞추셨습니다.");
-				dto.setMoney(dto.getMoney() + 100);
-				System.out.println("돈을 100원 획득하였습니다.");
+				dto.setMoney(dto.getMoney() + 1000);
+				System.out.println("돈을 1000원 획득하였습니다.");
 			} else if (num == 4) {
 				dto.setPosition(4);
 				System.out.println("축하합니다!!! 4개 맞추셨습니다.");

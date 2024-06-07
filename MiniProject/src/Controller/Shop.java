@@ -29,7 +29,7 @@ public class Shop {
 			int[] arr = new int[4];
 
 			for (int i = 0; i < 4; i++) {
-				arr[i] = rd.nextInt(5) + 1;
+				arr[i] = rd.nextInt(10) + 1;
 				for (int j = 0; j < i; j++) {
 					if (arr[i] == arr[j]) {
 						i--;
